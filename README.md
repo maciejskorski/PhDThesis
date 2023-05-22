@@ -2,4 +2,6 @@
 
 # Pseudoentropy - PhD Thesis
 
-This repository stores the source code and data of my PhD Thesis.
+This repository hosts the source code and data of my PhD Thesis.
+
+* See [the slides](./Thesis_slides.pdf)

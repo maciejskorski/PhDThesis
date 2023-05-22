@@ -4,4 +4,4 @@
 
 This repository hosts the source code and data of my PhD Thesis.
 
-* See [the slides](./Thesis_slides.pdf)
+* See [the slides](./Thesis-slides.pdf)

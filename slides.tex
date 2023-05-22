@@ -1,0 +1,368 @@
+\documentclass[10pt]{beamer}					% Document class
+
+\usepackage[english]{babel}				% Set language
+\usepackage[utf8x]{inputenc}			% Set encoding
+
+\mode<presentation>						% Set options
+{
+  \usetheme{AnnArbor}					% Set theme
+  \usecolortheme{orchid} 				% Set colors
+  \usefonttheme{default}  				% Set font theme
+  \setbeamertemplate{caption}[numbered]	% Set caption to be numbered
+}
+
+
+
+
+% Uncomment this to have the outline at the beginning of each section highlighted.
+\AtBeginSection[]
+{
+  \begin{frame}{Outline}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
+
+\AtBeginSubsection[]
+  {
+     \begin{frame}{Outline}
+     \tableofcontents[currentsubsection]
+     \end{frame}
+  }
+
+
+\usepackage{emoji}
+\usepackage{fontawesome5}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage{subcaption}
+\usepackage{graphicx}					% For including figures
+\usepackage{booktabs}					% For table rules
+\usepackage{hyperref}					% For cross-referencing
+\hypersetup{
+    colorlinks=true,
+}
+
+%\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+
+\title{Pseudoentropy}	% Presentation title
+\subtitle{PhD Dissertation Talk}
+%\author{MaciejSkorski}							% Presentation author
+\institute{University of Warsaw}					% Author affiliation
+\date{May 23, 2023}									% Dissertation's date	
+
+
+\begin{document}
+
+% Title page
+% This page includes the informations defined earlier including title, author/s, affiliation/s and the date
+\begin{frame}
+  \titlepage
+\end{frame}
+
+% Outline
+% This page includes the outline (Table of content) of the presentation. All sections and subsections will appear in the outline by default.
+
+\begin{frame}{This talk}
+\begin{itemize}
+    \item[\emoji{check-mark}] Overviews the goals, resources, and deliverables of my PhD project.
+    \item[\emoji{check-mark}] Demonstrates/sketches interesting techniques used in the dissertation.
+    \item[\emoji{check-mark}] Defends my position on the dissertation form, in view of reviews received \emoji{shield}.
+    \item[\emoji{cross-mark}] Avoids complex definitions and proofs for brevity's sake (see the papers) \emoji{stopwatch}.
+    \item[\emoji{cross-mark}] Does not assess my own academic KPIs (see the documentation) \emoji{flushed-face}.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+% The following is the most frequently used slide types in beamer
+% The slide structure is as follows:
+%
+%\begin{frame}{<slide-title>}
+%	<content>
+%\end{frame}
+
+\section{Acknowledgments \emoji{folded-hands}}
+
+\begin{frame}{Credits}
+I am particularly grateful:
+\begin{itemize}
+    \item \emoji{red-heart} for love, to my wife Aneta
+    \item \emoji{money-bag} for funding, to my advisor Stefan Dziembowski
+    \item \emoji{light-bulb} for merit support, to my co-advisor Krzysztof Pietrzak
+    \item \emoji{clapping-hands} for motivation and recognition, to dozens of people with whom I shared ideas: research collaborators, reviewers, audience \emoji{smiling-face}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Funding}
+My PhD research received support from numerous funding sources:
+\newline
+%\setlist[itemize]{align=parleft}
+\begin{itemize}[leftmargin=5em]
+    \item[{\includegraphics[height=15pt]{figures/Foundation_for_Polish_Science_logo.jpg}}] \qquad Ideas for Poland
+    \item[{\includegraphics[height=15pt]{figures/Foundation_for_Polish_Science_logo.jpg}}]\qquad WELCOME
+    \item[{\includegraphics[height=15pt]{figures/logo-erc.jpg}}]\qquad TOCNeT
+    \item[{\includegraphics[height=15pt]{figures/logo-ncn.png}}]\qquad PRELUDIUM
+    \item[{\emoji{globe-showing-americas}}]\qquad + several travel grants from various research institutions
+\end{itemize}
+\end{frame}
+
+\section{Introduction \emoji{chequered-flag}}
+
+
+
+\begin{frame}{About Pseudoentropy}
+\begin{itemize}[leftmargin=3em]
+\item[{\emoji{woman-scientist}\emoji{man-scientist}}] Introduced in~\cite{Impagliazzo1989,DBLP:journals/siamcomp/HastadILL99} as a \textbf{computational variant of information-theoretic entropy}.
+
+\item[\emoji{gear}\emoji{hammer}] Recognized as a \textbf{useful tool and convenient language} in research around
+cryptography, computational complexity and information theory. Examples:
+\begin{itemize}
+    \item[\emoji{bookmark-tabs}] Pseudorandom generators from one-way functions \cite{DBLP:journals/siamcomp/HastadILL99}
+    \item[\emoji{bookmark-tabs}] Computational Dense
+Model Theorem \cite{DBLP:conf/focs/ReingoldTTV08,DBLP:journals/eccc/Zhang11}, improving upon the result of Green-Tao-Ziegler 
+\end{itemize}
+\item[\emoji{puzzle-piece}\emoji{question}] Promising but messy: suffers from \textbf{contextual definitions} and \textbf{insufficiently developed foundations}.
+% https://emoji-copy.com/en/pile-of-poo-emoji-copy-paste/
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Goals}
+	My PhD project set these goals:
+    \begin{itemize}
+	\item[\emoji{broom}] \textbf{improve understanding of foundational properties} of pseudoentropy notions
+        \item[\emoji{gear}] \textbf{demonstrate further technical applications}
+        \item[\emoji{gem-stone}] optionally, identify \textbf{new inspirational application areas}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Contribution}
+Works presented under the scope of this PhD project:
+\begin{itemize}
+    \item [\emoji{heavy-check-mark}] \textbf{obtained characterizations and manipulation rules} for pseudoentropy notions, using \textbf{convex analysis as a toolbox}
+    \item [\emoji{heavy-check-mark}] \textbf{simplified some of existing technical proofs}, for instance of Dense Model Theorem and of Computational Simulators
+    \item [\emoji{heavy-check-mark}] \textbf{developed machine-learning inspired framework} for proving computational indistinguishability
+\end{itemize}
+My self-assesment:
+\begin{itemize}
+\item[\emoji{goal-net}] these works contributed to the goals 
+\emoji{broom},\emoji{gear} and \emoji{gem-stone} respectively.
+\item[\emoji{person-running}] goals were set broadly, leaving still room for improvement
+\end{itemize}
+\end{frame}
+
+
+\section{Detailed Overview \emoji{magnifying-glass-tilted-right}}
+
+\subsection{Preliminaries}
+
+\begin{frame}{Background}
+\begin{itemize}[\emoji{key}]
+\item Pseudoentropy at least $k$ when the distribution behaves \emph{nearly as well} as with information-theoretic (min)entropy $k$ in \emph{cryptographic games}.
+\item Program-input games used in definitions
+\begin{enumerate}[(a)]
+\item Distinguish: discriminate between two distributions based on a sample.
+\item Predict: guess a sampled outcome
+\item Compress: successfuly decode after decoding
+\end{enumerate}
+\end{itemize}
+\end{frame}
+
+\subsection{Geometric Characterizations of Pseudoentropy \emoji{broom}\emoji{gear}}
+
+\begin{frame}{Outline}
+\begin{itemize}
+\item[\emoji{open-book}] Indistinguishability quantifies how close are two distributions under a given class of computationally bounded tests. 
+\item[\emoji{question}] What is the geometrical meaning of indistinguishability?
+\item[\emoji{raised-hand}] Computational indistinguishability can be \textbf{characterized by inseparability by a class of feasible hyperplanes}. The margin of separation can be analytically characterized too! 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Contribution}
+The characterization has found the following applications:
+\begin{itemize}
+    \item[\emoji{key}] Unifying unpredictability-based and indistinguishability-based pseudoentropy notions~\cite{DBLP:conf/icalp/SkorskiGP15}
+    \item[\emoji{key}] Short proof of the Dense Model Theorem with optimal parameters~\cite{DBLP:conf/icits/Skorski15a}
+    \item[\emoji{key}] Further applications to key derivation~\cite{Skorski17a}
+    \item[\emoji{key}] Simplifies other technical arguments~\cite{DBLP:conf/stoc/VadhanZ12}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Technique (Sketch)}
+
+\newcommand{\D}{\mathsf{D}}
+\newcommand{\Y}{\textcolor{red}{\mathsf{Y}}}
+
+\begin{itemize}[\emoji{key}]
+\item In program-input indistinguishability games it makes sense to \textbf{characterize the optimal input player} $Y$ against a given program player $\D$.
+\item View $\D$ as a \emph{separating hyperplane}, \emph{maximize margin} with high-entropy $Y$
+\item The characterization may be complicated, as it depends on:
+\begin{enumerate}[(a)]
+    \item the class of feasible distnguishers
+    \item the entropy notion (min/Renyi, conditional/unconditional etc)
+\end{enumerate}
+\item Useful example: for min-entropy and boolean functions... 
+\end{itemize}
+
+\begin{figure}[htb]
+\begin{subfigure}{0.34\textwidth}
+\begin{tikzpicture}[
+    scale=0.5,
+    font=\sffamily,
+    bullet/.style=
+        {circle, minimum size=1,
+        inner sep=0pt, outer sep=0pt
+    },nodes=bullet
+]
+ \node[circle,draw,fill=gray, minimum size=3cm] (Y) at (0,0) {$Y$ (high entropy)} ;
+ \node[label={south west:$Y_{\D}^{\max}$}] (Ymax) at (Y.225) {$\bullet$};
+ \node[label=$\mathbf{P}_X$] (X) at (3,3) {$\bullet$};
+ \draw(0,5)  to node[sloped,midway,below right=0.25] {$\D$}(5,0);
+ \draw[->, dashed] (X) -- (Ymax);
+\end{tikzpicture}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.65\textwidth}
+\resizebox{0.95\linewidth}{!}{
+    \begin{tabular}[b]{ccc}\hline
+      Symbol/Operator & Crypto & Geometry\\ \hline
+      $X$ & candidate distribution \\
+      $\mathbf{E}\D(Y)$ & expectation & $\D\cdot \mathbf{P}_Y$ (dot-product)\\
+      $\D$ & distinguisher/program player & separating hyperplane \\
+      $Y$ & input player & feasible point \\
+      $\epsilon=\mathbf{E}\D(Y)-\mathbf{E}\D(X)$  & advantage & margin \\
+ \hline
+    \end{tabular}
+}
+\end{subfigure}
+\caption{Geometrical meaning of cryptographic indistinguishability.}
+\end{figure}
+
+
+\end{frame}
+
+\subsection{Unpredictability Pseudoentropy \emoji{broom}}
+
+\begin{frame}{Outline}
+\begin{itemize}
+\item[\emoji{open-book}] Applications of pseudoentropy use different notions, most commonly unpredictability-based and indistinguishability-based.
+\item[\emoji{question}] Are unpredictability and indistinguishability entropies different? 
+
+Note: usually, distinguishing is easier than predicting\footnote{Think of discriminating between dogs and cats versus predicting the breed.}
+\item[\emoji{raised-hand}] Surprisingly, \textbf{equivalent in high-entropy regimes}!
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Contribution}
+The following result was obtained~\cite{DBLP:conf/icalp/SkorskiGP15}:
+\begin{itemize}
+    \item[\emoji{key}] \textbf{equivalence of unpredictability and indistinguishability} pseudoentropy definitions in \textbf{high-entropy regimes}, namely $n-O(\log n)$ for $n$-bit strings,
+    \item[\emoji{key}] \textbf{geometric characterizations as a workhorse} of the proof.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Technique (Sketch)}
+The proof strategy is to \emph{constructively convert a distinguisher into a predictor}:
+\newcommand{\D}{\textcolor{blue}{\mathsf{D}}}
+\begin{enumerate}[(a)]
+    \item Indistinguishability fails: $\mathbf{E}\D(X)\geqslant \mathbf{E}\D(Y)+\epsilon$ for all $Y$ of min-entropy $k$.
+    \item $\mathbf{E}\D(X)\geqslant |\D|/2^{k}+\epsilon$ for boolean $\D$, by geometrical characterizations (!)
+    \item Sample $\textcolor{red}{A}$ from the image of $\D$, then $\mathbf{P}\{\textcolor{red}{A} = X\} > 2^{-k}+\frac{\epsilon}{\#\D}$.
+    \item Approximate image sampling by rejection sampling $\ell$ times, then
+    $$\mathbf{P}\{\textcolor{red}{A} = X\} > \left( 2^{-k}+\frac{\epsilon}{\#\D} \right)\cdot \left(1-\frac{\# \D}{2^n}\right)^{\ell}.$$
+    \item $\mathbf{P}\{\textcolor{red}{A} = X\} > 2^{-k}$  when $\ell \approx 2^{n-k}/\epsilon$ independently of $\# \D$ !
+    \item[\emoji{warning}] More sophisticated rejection-sampling handles $X$ with auxiliary input $Z$.
+\end{enumerate}
+\end{frame}
+
+
+\note{Everything you want}
+
+
+\subsection{Best Generic Attacks on Pseudoentropy \emoji{gear}}
+
+\begin{frame}{Outline}
+\begin{itemize}
+\item[\emoji{open-book}] Applications of pseudoentropy assume strength parameters that propagate through reduction proofs. 
+\item[\emoji{question}] Can we characterize what quality parameters are non-trivial?
+\item[\emoji{raised-hand}] Yes, by time-advantage tradeoffs!
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Contribution}
+The following result was obtained:
+\begin{itemize}
+    \item[\emoji{key}] generic attacks with time $t$ succeed against psuedoentropy ammount $k$ with advantage $\epsilon = O\left(\sqrt{t/2^{k}}\right)$
+    \item[\emoji{key}] the result generalizes the famous time-advantage tradeoffs against pseudorandomness \cite{DBLP:conf/crypto/DeTT10} 
+\end{itemize}
+\end{frame}
+
+\subsection{Lower Bounds for Pseudoentropy Chain Rules and Transformations \emoji{gear}}
+
+\begin{frame}{Outline}
+\begin{itemize}
+\item[\emoji{open-book}] Applications of pseudoentropy \textbf{heavily rely on manipulation rules}, particularly chain rules and transformations~\cite{DBLP:conf/random/BarakSW03,DBLP:conf/tcc/FullerOR12}. Their use \textbf{weakens security guarantees}.
+\item[\emoji{question}] Can we improve known manipulation rules?
+\item[\emoji{raised-hand}] No, not by black-box reductions!
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Contribution}
+The following results were obtained:
+\begin{itemize}
+    \item[\emoji{key}] \textbf{impossibility of better proofs} by black-box reductions!
+    \item[\emoji{key}] the \textbf{probabilistic construction of an oracle}, of independent interest, inspired by earlier work limitations of dense model theorems~\cite{DBLP:journals/eccc/Zhang11}
+\end{itemize}
+\end{frame}
+
+\subsection{Simulating Auxiliary Information \emoji{gem-stone}}
+
+\begin{frame}{Outline}
+\begin{itemize}
+\item[\emoji{open-book}] In security proofs it helps to model leakages as explicit functions of secrets.
+\item[\emoji{question}] What leakages can be modelled, without substantial loss in security, as functions of secrets?
+\item[\emoji{raised-hand}] Short leakages can be simulated!
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Contribution}
+The following important results were obtained:
+\begin{itemize}
+\item[\emoji{key}] Construction of a simulator for $m$ bits of leakage which makes only $2^{O(m)}\epsilon^{-2}$ calls to achieve $\epsilon$-indistinguishability.
+\item[\emoji{trophy}] The reasoning, inspired by ML techniques, \textbf{builds on gradient descent} and was recognized with the \emph{best student paper award at TCC}.
+\end{itemize}
+\end{frame}
+
+
+
+%\bibliography{citations}
+
+\section{References \emoji{books}}
+
+% Adding the option 'allowframebreaks' allows the contents of the slide to be expanded in more than one slide.
+\begin{frame}[allowframebreaks]{References}
+	\tiny\bibliography{citations}
+	\bibliographystyle{alpha}
+\end{frame}
+
+\section{Discussion \emoji{speech-balloon}}
+
+\begin{frame}{Addressing Reviewers Feedback}
+\begin{itemize}
+    \item[R:] Editorial changes and reference requests.
+    \item[M:] Addressed, thanks for the feedback!
+    \item[R:] A book-style dissertation would be better than a mixture of conference works.
+    \item[M:] I discussed this form with senior researchers, but found \emph{ineffective}:
+    \begin{itemize}
+        \item[\emoji{carrot}] Gain citations! \emoji{thinking}\emph{Time-consuming, better to keep writing papers.}
+        \item[\emoji{carrot}] Get your PhD distinguished. \emoji{thinking}\emph{Prestigious conferences not enough?}
+        \item[\emoji{sweat-droplets}] Take your time to present it better! \emoji{thinking}\emph{Why to work harder? We count conference works when granting junior/senior  professorships!} 
+    \end{itemize}
+    \item[R:] Parts of lengthy works might not have been fully reviewed at conferences.
+    \item[M:] Indeed, the same risk as in case of granted junior professorships \emoji{relieved-face}
+\end{itemize}
+\end{frame}
+
+\end{document}

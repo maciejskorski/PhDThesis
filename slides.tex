@@ -1,4 +1,4 @@
-\documentclass[10pt]{beamer}					% Document class
+\documentclass[9pt]{beamer}					% Document class
 
 \usepackage[english]{babel}				% Set language
 \usepackage[utf8x]{inputenc}			% Set encoding
@@ -181,10 +181,10 @@ My self-assesment:
 \end{frame}
 
 \begin{frame}{Contribution}
-The characterization has found the following applications:
+The characterizations~\cite{DBLP:conf/icits/Skorski15} has found the following applications:
 \begin{itemize}
     \item[\emoji{key}] Unifying unpredictability-based and indistinguishability-based pseudoentropy notions~\cite{DBLP:conf/icalp/SkorskiGP15}
-    \item[\emoji{key}] Short proof of the Dense Model Theorem with optimal parameters~\cite{DBLP:conf/icits/Skorski15a}
+    \item[\emoji{key}] Short proof of the Dense Model Theorem~\cite{DBLP:conf/icits/Skorski15a}
     \item[\emoji{key}] Further applications to key derivation~\cite{Skorski17a}
     \item[\emoji{key}] Simplifies other technical arguments~\cite{DBLP:conf/stoc/VadhanZ12}
 \end{itemize}
@@ -196,27 +196,19 @@ The characterization has found the following applications:
 \newcommand{\Y}{\textcolor{red}{\mathsf{Y}}}
 
 \begin{itemize}[\emoji{key}]
-\item In program-input indistinguishability games it makes sense to \textbf{characterize the optimal input player} $Y$ against a given program player $\D$.
-\item View $\D$ as a \emph{separating hyperplane}, \emph{maximize margin} with high-entropy $Y$
-\item The characterization may be complicated, as it depends on:
-\begin{enumerate}[(a)]
-    \item the class of feasible distnguishers
-    \item the entropy notion (min/Renyi, conditional/unconditional etc)
-\end{enumerate}
-\item Useful example: for min-entropy and boolean functions... 
-\end{itemize}
-
+\item In program-input indistinguishability games, it makes sense to \textbf{characterize the optimal input player} $Y$ against a given program player $\D$.
+\item View $\D$ as a \emph{separating hyperplane}, \emph{maximize margin} with high-entropy $Y$.
 \begin{figure}[htb]
-\begin{subfigure}{0.34\textwidth}
+\begin{subfigure}{0.3\textwidth}
 \begin{tikzpicture}[
-    scale=0.5,
+    scale=0.4,
     font=\sffamily,
     bullet/.style=
         {circle, minimum size=1,
         inner sep=0pt, outer sep=0pt
     },nodes=bullet
 ]
- \node[circle,draw,fill=gray, minimum size=3cm] (Y) at (0,0) {$Y$ (high entropy)} ;
+ \node[circle,draw,fill=gray, minimum size=1.25cm] (Y) at (0,0) {$Y$: high entropy} ;
  \node[label={south west:$Y_{\D}^{\max}$}] (Ymax) at (Y.225) {$\bullet$};
  \node[label=$\mathbf{P}_X$] (X) at (3,3) {$\bullet$};
  \draw(0,5)  to node[sloped,midway,below right=0.25] {$\D$}(5,0);
@@ -224,7 +216,7 @@ The characterization has found the following applications:
 \end{tikzpicture}
 \end{subfigure}
 \hfill
-\begin{subfigure}{0.65\textwidth}
+\begin{subfigure}{0.5\textwidth}
 \resizebox{0.95\linewidth}{!}{
     \begin{tabular}[b]{ccc}\hline
       Symbol/Operator & Crypto & Geometry\\ \hline
@@ -232,14 +224,16 @@ The characterization has found the following applications:
       $\mathbf{E}\D(Y)$ & expectation & $\D\cdot \mathbf{P}_Y$ (dot-product)\\
       $\D$ & distinguisher/program player & separating hyperplane \\
       $Y$ & input player & feasible point \\
-      $\epsilon=\mathbf{E}\D(Y)-\mathbf{E}\D(X)$  & advantage & margin \\
+      $\epsilon=\mathbf{E}\D(Y)-\mathbf{E}\D(X)$  & advantage & separation margin \\
  \hline
     \end{tabular}
 }
 \end{subfigure}
 \caption{Geometrical meaning of cryptographic indistinguishability.}
 \end{figure}
-
+\item \textbf{Closed-form solutions found} in interesting cases by \textbf{convex optimization}. For pseudoentropy of at least $k$ bits against attackers $\mathcal{D}$ with advantage $\epsilon$: $$\forall \D\in\mathcal{D}:\quad \mathbf{E}\D(X) \leqslant 2^{-k}|\D|+\epsilon$$ instead of the standard depth-2 formula $\forall \D \exists Y\ \mathbf{E}\D(X) \leqslant \mathbf{E}\D(Y)+\epsilon$.
+\item[\emoji{warning}] Characterization depend on feasible distinguishers and the baseline entropy.
+\end{itemize}
 
 \end{frame}
 
@@ -270,7 +264,7 @@ The proof strategy is to \emph{constructively convert a distinguisher into a pre
     \item Indistinguishability fails: $\mathbf{E}\D(X)\geqslant \mathbf{E}\D(Y)+\epsilon$ for all $Y$ of min-entropy $k$.
     \item $\mathbf{E}\D(X)\geqslant |\D|/2^{k}+\epsilon$ for boolean $\D$, by geometrical characterizations (!)
     \item Sample $\textcolor{red}{A}$ from the image of $\D$, then $\mathbf{P}\{\textcolor{red}{A} = X\} > 2^{-k}+\frac{\epsilon}{\#\D}$.
-    \item Approximate image sampling by rejection sampling $\ell$ times, then
+    \item Approximate image sampling by \emph{rejection sampling} $\ell$ times, then
     $$\mathbf{P}\{\textcolor{red}{A} = X\} > \left( 2^{-k}+\frac{\epsilon}{\#\D} \right)\cdot \left(1-\frac{\# \D}{2^n}\right)^{\ell}.$$
     \item $\mathbf{P}\{\textcolor{red}{A} = X\} > 2^{-k}$  when $\ell \approx 2^{n-k}/\epsilon$ independently of $\# \D$ !
     \item[\emoji{warning}] More sophisticated rejection-sampling handles $X$ with auxiliary input $Z$.
@@ -361,7 +355,7 @@ The following important results were obtained:
         \item[\emoji{sweat-droplets}] Take your time to present it better! \emoji{thinking}\emph{Why to work harder? We count conference works when granting junior/senior  professorships!} 
     \end{itemize}
     \item[R:] Parts of lengthy works might not have been fully reviewed at conferences.
-    \item[M:] Indeed, the same risk as in case of granted junior professorships \emoji{relieved-face}
+    \item[M:] Same as in case of granted junior professorships, but we had extra reviewers \emoji{relieved-face}.
 \end{itemize}
 \end{frame}
 

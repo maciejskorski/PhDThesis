@@ -2,6 +2,7 @@
 
 \usepackage[english]{babel}				% Set language
 \usepackage[utf8x]{inputenc}			% Set encoding
+\usepackage[ruled]{algorithm2e}
 
 \mode<presentation>						% Set options
 {
@@ -231,7 +232,7 @@ The characterizations~\cite{DBLP:conf/icits/Skorski15} has found the following a
 \end{subfigure}
 \caption{Geometrical meaning of cryptographic indistinguishability.}
 \end{figure}
-\item \textbf{Closed-form solutions found} in interesting cases by \textbf{convex optimization}. For pseudoentropy of at least $k$ bits against attackers $\mathcal{D}$ with advantage $\epsilon$: $$\forall \D\in\mathcal{D}:\quad \mathbf{E}\D(X) \leqslant 2^{-k}|\D|+\epsilon$$ instead of the standard depth-2 formula $\forall \D \exists Y\ \mathbf{E}\D(X) \leqslant \mathbf{E}\D(Y)+\epsilon$.
+\item \textbf{Closed-form solutions found} in interesting cases by \textbf{convex optimization}. For pseudoentropy of at least $k$ bits against attackers $\mathcal{D}$ with advantage $\epsilon$: $$\forall \D\in\mathcal{D}:\quad \mathbf{E}\D(X) \leqslant 2^{-k}|\D|+\epsilon$$ instead of the standard depth-2 formula $\forall \D \exists Y:\mathbf{H}_{\infty}(Y)\geqslant k \& \ \mathbf{E}\D(X) \leqslant \mathbf{E}\D(Y)+\epsilon$.
 \item[\emoji{warning}] Characterization depend on feasible distinguishers and the baseline entropy.
 \end{itemize}
 
@@ -263,10 +264,10 @@ The proof strategy is to \emph{constructively convert a distinguisher into a pre
 \begin{enumerate}[(a)]
     \item Indistinguishability fails: $\mathbf{E}\D(X)\geqslant \mathbf{E}\D(Y)+\epsilon$ for all $Y$ of min-entropy $k$.
     \item $\mathbf{E}\D(X)\geqslant |\D|/2^{k}+\epsilon$ for boolean $\D$, by geometrical characterizations (!)
-    \item Sample $\textcolor{red}{A}$ from the image of $\D$, then $\mathbf{P}\{\textcolor{red}{A} = X\} > 2^{-k}+\frac{\epsilon}{\#\D}$.
+    \item Sample $\textcolor{green}{A}$ from the image of $\D$, then $\mathbf{P}\{\textcolor{green}{A} = X\} > 2^{-k}+\frac{\epsilon}{\#\D}$.
     \item Approximate image sampling by \emph{rejection sampling} $\ell$ times, then
-    $$\mathbf{P}\{\textcolor{red}{A} = X\} > \left( 2^{-k}+\frac{\epsilon}{\#\D} \right)\cdot \left(1-\frac{\# \D}{2^n}\right)^{\ell}.$$
-    \item $\mathbf{P}\{\textcolor{red}{A} = X\} > 2^{-k}$  when $\ell \approx 2^{n-k}/\epsilon$ independently of $\# \D$ !
+    $$\mathbf{P}\{\textcolor{green}{A} = X\} > \left( 2^{-k}+\frac{\epsilon}{\#\D} \right)\cdot \left(1-\frac{\# \D}{2^n}\right)^{\ell}.$$
+    \item $\mathbf{P}\{\textcolor{green}{A} = X\} > 2^{-k}$  when $\ell \approx 2^{\textcolor{red}{n-k}}/\epsilon$ independently of $\# \D$ !
     \item[\emoji{warning}] More sophisticated rejection-sampling handles $X$ with auxiliary input $Z$.
 \end{enumerate}
 \end{frame}
@@ -297,7 +298,7 @@ The following result was obtained:
 
 \begin{frame}{Outline}
 \begin{itemize}
-\item[\emoji{open-book}] Applications of pseudoentropy \textbf{heavily rely on manipulation rules}, particularly chain rules and transformations~\cite{DBLP:conf/random/BarakSW03,DBLP:conf/tcc/FullerOR12}. Their use \textbf{weakens security guarantees}.
+\item[\emoji{open-book}] Applications of pseudoentropy \textbf{heavily rely on manipulation rules}, particularly chain rules and transformations~\cite{DBLP:conf/random/BarakSW03,DBLP:conf/tcc/FullerOR12}. Their use in proofs \textbf{weakens security guarantees} due to tradeoffs in quality parameters.
 \item[\emoji{question}] Can we improve known manipulation rules?
 \item[\emoji{raised-hand}] No, not by black-box reductions!
 \end{itemize}
@@ -322,13 +323,44 @@ The following results were obtained:
 \end{frame}
 
 \begin{frame}{Contribution}
-The following important results were obtained:
+The following important results were obtained~\cite{skorski2016simulating}:
 \begin{itemize}
-\item[\emoji{key}] Construction of a simulator for $m$ bits of leakage which makes only $2^{O(m)}\epsilon^{-2}$ calls to achieve $\epsilon$-indistinguishability.
-\item[\emoji{trophy}] The reasoning, inspired by ML techniques, \textbf{builds on gradient descent} and was recognized with the \emph{best student paper award at TCC}.
+\item[\emoji{key}] Construction of a simulator for $m$ bits of leakage which makes only $2^{O(m)}\epsilon^{-2}$ calls to achieve $\epsilon$-indistinguishability. Significantly improved upon prior works~\cite{DBLP:conf/crypto/VadhanZ13,DBLP:conf/tcc/JetchevP14}
+\item[\emoji{trophy}] The reasoning, inspired by ML techniques, \textbf{builds on the gradient descent algorithm} and was recognized with the \emph{best student paper award at TCC}.
+\item[\emoji{fire}] Inspired follow-up works that solved the simulator problem~\cite{Chen_2018}, and generalized the learning framework~\cite{skorski2016subgradient,skorskiapproximating}, and studied quantum pseudoentropy (c.f. Chen's dissertation~\cite{chen2019computational}). 
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Technique (Sketch)}
+\begin{enumerate}[(a)]
+\item The algorithm below demonstrates the procedure  
+\newcommand{\D}{\mathsf{D}}
+\scalebox{0.75}{
+\begin{algorithm}[H]
+\SetAlgoLined
+\DontPrintSemicolon
+\caption{Auxiliary Input Simulator}\label{alg:two}
+\KwData{
+\begin{enumerate}[-]
+\item Oracle access to distinguishers/test functions $\mathcal{D}$
+\end{enumerate}
+}
+\KwResult{Simulator $h$ of $Z\in\{0,1\}^m$ given $X\in\{0,1\}^n$}
+$\mathbf{P}\{h(x)=z\}\gets 2^{-m}$ \tcp*{initialize the solution as uniform} 
+\While{$\max_{D\in\mathcal{D}} \mathbf{E}\D(X,Z)-\mathbf{E}\D(X,h(X)) > \epsilon$ \tcp*{as long as can distinguish...} }{
+  $\mathbf{P}\{h'(x)=z\} \gets \mathbf{P}\{h(x)=z\} - \gamma \D(x,z)$ \tcp*{improve candidate}
+  $\mathbf{P}\{h'(x)=z\} \gets \mathbf{P}\{h'(x)=z\} + \mathsf{Correct}(x,z)$ \tcp*{guarantee constraints}
+  $h\gets h'$
+ }
+\Return $h$
+\end{algorithm}
+}
+\item Outputs an efficient simulator p.d.f., with appropriate  $\gamma$ and $\mathsf{Correct}$ operation. 
+\item Finishes after $2^{O(m)}\epsilon^{-2}$ steps, proved by "energy" arguments.
+\item Resembles boosting: we learn how to (strongly) simulate from (weak) distinguishers
+\item Resembles convex optimization: with $\D$ as subgradient, $\gamma$ as a stepsize, $\mathsf{Correct}$ as a projection operation!
+\end{enumerate}
+\end{frame}
 
 
 %\bibliography{citations}
@@ -355,7 +387,7 @@ The following important results were obtained:
         \item[\emoji{sweat-droplets}] Take your time to present it better! \emoji{thinking}\emph{Why to work harder? We count conference works when granting junior/senior  professorships!} 
     \end{itemize}
     \item[R:] Parts of lengthy works might not have been fully reviewed at conferences.
-    \item[M:] Same as in case of granted junior professorships, but we had extra reviewers \emoji{relieved-face}.
+    \item[M:] Same as in case of junior professorships, but we had extra reviewers \emoji{relieved-face}.
 \end{itemize}
 \end{frame}
 

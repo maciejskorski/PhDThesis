@@ -93,7 +93,7 @@ I am particularly grateful:
     \item \emoji{red-heart} for love, to my wife Aneta
     \item \emoji{money-bag} for funding and know-how, to my advisor Stefan Dziembowski
     \item \emoji{light-bulb} for merit support, to my co-advisor Krzysztof Pietrzak
-    \item \emoji{clapping-hands} for motivation and recognition, to dozens of people with whom I shared ideas: research collaborators, reviewers, audience \emoji{smiling-face}
+    \item \emoji{clapping-hands} for motivation and recognition, to dozens of people with whom I shared ideas: research collaborators, reviewers, audience of my talks \emoji{smiling-face}
 \end{itemize}
 \end{frame}
 
@@ -123,7 +123,7 @@ cryptography, computational complexity and information theory. Examples:
 \begin{itemize}
     \item[\emoji{bookmark-tabs}] Pseudorandom generators from one-way functions \cite{DBLP:journals/siamcomp/HastadILL99}
     \item[\emoji{bookmark-tabs}] Computational Dense
-Model Theorem \cite{DBLP:conf/focs/ReingoldTTV08,DBLP:journals/eccc/Zhang11}, improving upon the result of Green-Tao-Ziegler 
+Model Theorem \cite{DBLP:conf/focs/ReingoldTTV08,DBLP:journals/eccc/Zhang11}, improving upon the key ingredient in the results of Green-Tao-Ziegler~\cite{green2008primes,tao2008primes}.
 \end{itemize}
 \item[\emoji{puzzle-piece}\emoji{question}] Promising but messy: suffers from \textbf{contextual definitions} and \textbf{insufficiently developed foundations}.
 % https://emoji-copy.com/en/pile-of-poo-emoji-copy-paste/
@@ -160,13 +160,16 @@ My self-assesment:
 \subsection{Preliminaries}
 
 \begin{frame}{Background}
+\newcommand{\D}{\mathsf{D}}
 \begin{itemize}[\emoji{key}]
 \item Pseudoentropy at least $k$ when the distribution behaves \emph{nearly as well} as with information-theoretic (min)entropy $k$ in \emph{cryptographic games}.
 \item Program-input games used in definitions
 \begin{enumerate}[(a)]
-\item Distinguish: discriminate between two distributions based on a sample.
-\item Predict: guess a sampled outcome
-\item Compress: successfuly decode after decoding
+\item Distinguish: discriminate between two distributions based on a sample.\newline  Pseudoentropy example: for a pseudorandom generator $G$ from $d$-bit seeds to $k$-bit outputs, $|\mathbf{E}\D(G(U_d))-\mathbf{E}\D(U_k)|\leqslant \epsilon$ for small $\epsilon$ and comp. bounded $\D$.
+\item Predict: guess a sampled outcome. \newline
+Pseudoentropy example: a one way function $f$ satisfies $\mathbf{P}\{ f(\D(f(x)))=f(x) \}\leqslant 2^{-k}$ for computationally bounded $\D$ and large $k$.
+\item Compress: decoding / encoding games, see~\cite{yao1982theory, DBLP:conf/random/BarakSW03}.
+\item ... and even more exotic examples, see~\cite{haitner2009inaccessible}.
 \end{enumerate}
 \end{itemize}
 \end{frame}
@@ -177,7 +180,7 @@ My self-assesment:
 \begin{itemize}
 \item[\emoji{open-book}] Indistinguishability quantifies how close are two distributions under a given class of computationally bounded tests. 
 \item[\emoji{question}] What is the geometrical meaning of indistinguishability?
-\item[\emoji{raised-hand}] Computational indistinguishability can be \textbf{characterized by inseparability by a class of feasible hyperplanes}. The margin of separation can be analytically characterized too! 
+\item[\emoji{raised-hand}] Computational indistinguishability can be \textbf{characterized by inseparability by a class of feasible hyperplanes}. The separation margin can be determined analytically too! 
 \end{itemize}
 \end{frame}
 
@@ -186,6 +189,7 @@ The characterizations~\cite{DBLP:conf/icits/Skorski15} has found the following a
 \begin{itemize}
     \item[\emoji{key}] Unifying unpredictability-based and indistinguishability-based pseudoentropy notions~\cite{DBLP:conf/icalp/SkorskiGP15}
     \item[\emoji{key}] Short proof of the Dense Model Theorem~\cite{DBLP:conf/icits/Skorski15a}
+    \item[\emoji{key}] New proofs of Hardcore Lemmas~\cite{DBLP:conf/icits/Skorski15a}
     \item[\emoji{key}] Further applications to key derivation~\cite{Skorski17a}
     \item[\emoji{key}] Simplifies other technical arguments~\cite{DBLP:conf/stoc/VadhanZ12}
 \end{itemize}
@@ -222,9 +226,9 @@ The characterizations~\cite{DBLP:conf/icits/Skorski15} has found the following a
     \begin{tabular}[b]{ccc}\hline
       Symbol/Operator & Crypto & Geometry\\ \hline
       $X$ & candidate distribution \\
-      $\mathbf{E}\D(Y)$ & expectation & $\D\cdot \mathbf{P}_Y$ (dot-product)\\
-      $\D$ & distinguisher/program player & separating hyperplane \\
       $Y$ & input player & feasible point \\
+      $\D$ & distinguisher/program player & separating hyperplane \\
+      $\mathbf{E}\D(Y)$ & expectation & $\D\cdot \mathbf{P}_Y$ (dot-product)\\
       $\epsilon=\mathbf{E}\D(Y)-\mathbf{E}\D(X)$  & advantage & separation margin \\
  \hline
     \end{tabular}
@@ -245,7 +249,7 @@ The characterizations~\cite{DBLP:conf/icits/Skorski15} has found the following a
 \item[\emoji{open-book}] Applications of pseudoentropy use different notions, most commonly unpredictability-based and indistinguishability-based.
 \item[\emoji{question}] Are unpredictability and indistinguishability entropies different? 
 
-Note: usually, distinguishing is easier than predicting\footnote{Think of discriminating between dogs and cats versus predicting the breed.}
+Note: usually, distinguishing is easier than predicting\footnote{Think of discriminating between dogs and cats versus predicting the breed.}.
 \item[\emoji{raised-hand}] Surprisingly, \textbf{equivalent in high-entropy regimes}!
 \end{itemize}
 \end{frame}
@@ -319,9 +323,9 @@ $|\mathbf{E} \D'(X)-\mathbf{E} \D'(Y)| \approx t\cdot \frac{\|\mathbf{P}_X-\math
 \begin{frame}{Contribution}
 The following results were obtained in~\cite{pietrzak2016pseudoentropy}:
 \begin{itemize}
-    \item[\emoji{key}] \textbf{impossibility of better proofs} by black-box reductions!
-    \item[\emoji{key}] the \textbf{probabilistic construction of an oracle}, of independent interest, inspired by the earlier work on limitations of dense model theorems~\cite{DBLP:journals/eccc/Zhang11}
-    \item[\emoji{fire}] this construction inspired techniques used in research on black-box limitations of auxiliary input simulators~\cite{Chen_2018}
+    \item[\emoji{key}] \textbf{Impossibility of better proofs} by black-box reductions!
+    \item[\emoji{key}] A \textbf{probabilistic construction of an oracle}, of independent interest, inspired by the earlier work on limitations of dense model theorems~\cite{DBLP:journals/eccc/Zhang11}.
+    \item[\emoji{fire}] Inspired techniques used in research on black-box limitations of auxiliary input simulators~\cite{Chen_2018}.
 \end{itemize}
 \end{frame}
 
@@ -329,10 +333,14 @@ The following results were obtained in~\cite{pietrzak2016pseudoentropy}:
 \newcommand{\D}{\mathsf{\D}}
 \begin{enumerate}[(a)]
     \item Proofs, in case of indistinguishability-based pseudoentropy, rely on \emph{building distinguishers from distinguishers in other setups}. In particular, we have 
-    $D' = \mathbb{I}\{\sum_i w_i D_i > t_0\}$  in the proof of the Dense Model Theorem~\cite{DBLP:journals/eccc/Zhang11} or transformations~\cite{skorski2015new}.
+    $D' = \mathbb{I}\{\sum_i w_i D_i > t_0\}$  in the proof of the Dense Model Theorem~\cite{DBLP:journals/eccc/Zhang11} or transformations~\cite{DBLP:conf/random/BarakSW03,skorski2015new}.
     \item Loosely speaking, black-box reductions \emph{aggregate distinguishers by high-level operations}. To prove the need of many operations (queries) we manipulate distinguishers at low-level by \emph{choosing values probabilistically and sophistically}!
-    \item Examples: $D_i\sim \mathsf{Bern}(1/2+\epsilon)$ on a small set and $D_i\sim \mathsf{Bern}(1/2)$ elsewhere.
-    \item[\emoji{warning}] High-level aggregations are essential. Without them, Dense Model Theorems fail~\cite{impagliazzo2020comparing}.
+    \item Examples (from the proof, see also~\cite{Chen_2018}): 
+    \begin{enumerate}[(1)]
+    \item $D_i\sim \mathsf{Bern}(1/2+\epsilon)$ on a small set and $D_i\sim \mathsf{Bern}(1/2)$ elsewhere.
+    \item $D_i\sim \mathsf{Bern}(1/2+\epsilon)$ and $D_i\sim \mathsf{Bern}(1/2-\epsilon)$ on complementary random subsets.
+    \end{enumerate}
+    \item[\emoji{warning}] High-level aggregations are essential. For example, without them Dense Model Theorems can fail~\cite{impagliazzo2020comparing}.
 \end{enumerate}
 \end{frame}
 

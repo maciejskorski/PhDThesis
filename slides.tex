@@ -2,7 +2,7 @@
 
 \usepackage[english]{babel}				% Set language
 \usepackage[utf8x]{inputenc}			% Set encoding
-\usepackage[ruled]{algorithm2e}
+\usepackage[ruled,linesnumbered]{algorithm2e}
 
 \mode<presentation>						% Set options
 {
@@ -217,7 +217,7 @@ The characterizations~\cite{DBLP:conf/icits/Skorski15} has found the following a
 \end{tikzpicture}
 \end{subfigure}
 \hfill
-\begin{subfigure}{0.5\textwidth}
+\begin{subfigure}{0.6\textwidth}
 \resizebox{0.95\linewidth}{!}{
     \begin{tabular}[b]{ccc}\hline
       Symbol/Operator & Crypto & Geometry\\ \hline
@@ -280,45 +280,69 @@ The proof strategy is to \emph{constructively convert a distinguisher into a pre
 
 \begin{frame}{Outline}
 \begin{itemize}
-\item[\emoji{open-book}] Applications of pseudoentropy assume strength parameters that propagate through reduction proofs. 
-\item[\emoji{question}] Can we characterize what quality parameters are non-trivial?
-\item[\emoji{raised-hand}] Yes, by time-advantage tradeoffs!
+\item[\emoji{open-book}] Applications of pseudoentropy assume strength parameters that propagate through reduction proofs. Not clear what regimes are non-trivial to start with.
+\item[\emoji{question}] Can we characterize when quality parameters are non-trivial?
+\item[\emoji{raised-hand}] Yes, by time-advantage tradeoffs - similarly to pseudorandomness!
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Contribution}
-The following result was obtained:
+The following result was obtained~\cite{Skorski17a}:
 \begin{itemize}
-    \item[\emoji{key}] generic attacks with time $t$ succeed against psuedoentropy ammount $k$ with advantage $\epsilon = O\left(\sqrt{t/2^{k}}\right)$
-    \item[\emoji{key}] the result generalizes the famous time-advantage tradeoffs against pseudorandomness \cite{DBLP:conf/crypto/DeTT10} 
+    \item[\emoji{key}] generic attacks with time $t$ succeed against psuedoentropy amount $k$ with advantage $\epsilon = O\left(\sqrt{t/2^{k}}\right)$.
+    \item[\emoji{key}] generalization of the famous time-advantage tradeoffs against pseudorandomness \cite{DBLP:conf/crypto/DeTT10}.
 \end{itemize}
+\end{frame}
+
+\begin{frame}{Technique (Sketch)}
+\newcommand{\D}{\mathsf{D}}
+The proof leverages \textbf{random walk techniques}, see also~\cite{berger_fourth_1997}.
+\begin{enumerate}[(a)]
+\item Let $\D:\{0,1\}^n\to \{-1,1\}$ be fully random (Rademacher), then $|\mathbf{E} \D(X)-\mathbf{E} \D(Y)| \approx \|\mathbf{P}_X-\mathbf{P}_Y\|_2$ w.h.p. (random walks theory~\cite{haagerup1981best}).
+\item By slicing the domain $\{0,1\}^n$ into $t$ random parts and flipping the signs accordingly, we can have
+$|\mathbf{E} \D'(X)-\mathbf{E} \D'(Y)| \approx t\cdot \frac{\|\mathbf{P}_X-\mathbf{P}_Y\|_2}{\sqrt{t}}$ w.h.p., with $O(t)$ extra memory.
+\item Under mild assumptions on $Y$ (far from having $k$ bits of min-entropy) the attack achieves advantage $\epsilon\approx \sqrt{t/2^k}$. Compare with $\epsilon\approx \sqrt{t/2^n}$ for pseudorandomness!
+\item "Random" can be weakened to \textbf{$O(1)$-wise independent}, and the construction complexity is indeed $O(t)$, alternatively complexity $t$ yields $\epsilon=O(\sqrt{t/2^k})$!
+\end{enumerate}   
 \end{frame}
 
 \subsection{Lower Bounds for Pseudoentropy Chain Rules and Transformations \emoji{gear}}
 
 \begin{frame}{Outline}
 \begin{itemize}
-\item[\emoji{open-book}] Applications of pseudoentropy \textbf{heavily rely on manipulation rules}, particularly chain rules and transformations~\cite{DBLP:conf/random/BarakSW03,DBLP:conf/tcc/FullerOR12}. Their use in proofs \textbf{weakens security guarantees} due to tradeoffs in quality parameters.
+\item[\emoji{open-book}] Applications of pseudoentropy \textbf{heavily rely on manipulation rules}, particularly chain rules and transformations~\cite{DBLP:conf/random/BarakSW03,DBLP:conf/tcc/FullerOR12}. However, their use \textbf{weakens security guarantees}, due to tradeoffs in quality parameters \textbf{caused by reduction proofs}.
 \item[\emoji{question}] Can we improve known manipulation rules?
 \item[\emoji{raised-hand}] No, not by black-box reductions!
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Contribution}
-The following results were obtained:
+The following results were obtained in~\cite{pietrzak2016pseudoentropy}:
 \begin{itemize}
     \item[\emoji{key}] \textbf{impossibility of better proofs} by black-box reductions!
-    \item[\emoji{key}] the \textbf{probabilistic construction of an oracle}, of independent interest, inspired by earlier work limitations of dense model theorems~\cite{DBLP:journals/eccc/Zhang11}
+    \item[\emoji{key}] the \textbf{probabilistic construction of an oracle}, of independent interest, inspired by the earlier work on limitations of dense model theorems~\cite{DBLP:journals/eccc/Zhang11}
+    \item[\emoji{fire}] this construction inspired techniques used in research on black-box limitations of auxiliary input simulators~\cite{Chen_2018}
 \end{itemize}
+\end{frame}
+
+\begin{frame}{Techniques (Sketch)}
+\newcommand{\D}{\mathsf{\D}}
+\begin{enumerate}[(a)]
+    \item Proofs, in case of indistinguishability-based pseudoentropy, rely on \emph{building distinguishers from distinguishers in other setups}. In particular, we have 
+    $D' = \mathbb{I}\{\sum_i w_i D_i > t_0\}$  in the proof of the Dense Model Theorem~\cite{DBLP:journals/eccc/Zhang11} or transformations~\cite{skorski2015new}.
+    \item Loosely speaking, black-box reductions \emph{aggregate distinguishers by high-level operations}. To prove the need of many operations (queries) we manipulate distinguishers at low-level by choosing values probabilistically!
+    \item Examples: $D_i\sim \mathsf{Bern}(1/2+\epsilon)$ on a small set and $D_i\sim \mathsf{Bern}(1/2)$ elsewhere.
+    \item[\emoji{warning}] High-level aggregations are essential. Without them, Dense Model Theorems fail~\cite{impagliazzo2020comparing}.
+\end{enumerate}
 \end{frame}
 
 \subsection{Simulating Auxiliary Information \emoji{gem-stone}}
 
 \begin{frame}{Outline}
 \begin{itemize}
-\item[\emoji{open-book}] In security proofs it helps to model leakages as explicit functions of secrets.
-\item[\emoji{question}] What leakages can be modelled, without substantial loss in security, as functions of secrets?
-\item[\emoji{raised-hand}] Short leakages can be simulated!
+\item[\emoji{open-book}] In security proofs, it helps to model leakages as explicit functions of secrets~\cite{DBLP:conf/tcc/JetchevP14}.
+\item[\emoji{question}] What leakages can be modelled as functions of secrets?
+\item[\emoji{raised-hand}] Short leakages can be efficiently simulated!
 \end{itemize}
 \end{frame}
 
@@ -326,7 +350,7 @@ The following results were obtained:
 The following important results were obtained~\cite{skorski2016simulating}:
 \begin{itemize}
 \item[\emoji{key}] Construction of a simulator for $m$ bits of leakage which makes only $2^{O(m)}\epsilon^{-2}$ calls to achieve $\epsilon$-indistinguishability. Significantly improved upon prior works~\cite{DBLP:conf/crypto/VadhanZ13,DBLP:conf/tcc/JetchevP14}
-\item[\emoji{trophy}] The reasoning, inspired by ML techniques, \textbf{builds on the gradient descent algorithm} and was recognized with the \emph{best student paper award at TCC}.
+\item[\emoji{trophy}] The reasoning, inspired by ML techniques, \textbf{builds on the gradient descent algorithm} and was recognized with the \emph{best student paper award at TCC'16}.
 \item[\emoji{fire}] Inspired follow-up works that solved the simulator problem~\cite{Chen_2018}, and generalized the learning framework~\cite{skorski2016subgradient,skorskiapproximating}, and studied quantum pseudoentropy (c.f. Chen's dissertation~\cite{chen2019computational}). 
 \end{itemize}
 \end{frame}
@@ -387,7 +411,7 @@ $\mathbf{P}\{h(x)=z\}\gets 2^{-m}$ \tcp*{initialize the solution as uniform}
         \item[\emoji{sweat-droplets}] Take your time to present it better! \emoji{thinking}\emph{Why to work harder? We count conference works when granting junior/senior  professorships!} 
     \end{itemize}
     \item[R:] Parts of lengthy works might not have been fully reviewed at conferences.
-    \item[M:] Same as in case of junior professorships, but we had extra reviewers \emoji{relieved-face}.
+    \item[M:] Same can happen for junior professorships, but we had extra reviewers \emoji{relieved-face}.
 \end{itemize}
 \end{frame}
 
